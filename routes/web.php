@@ -25,7 +25,7 @@ Route::get('my-orders', MyOrdersPage::class);
 Route::get('success', SuccessPage::class);
 Route::get('cancel', CancelPage::class);
 Route::get('/my-orders/{order}', OrderDetailPage::class);
-Route::get('/products/{product}', ProductDetailPage::class);
+Route::get('/products/{slug}', ProductDetailPage::class);
 
 Route::get('login', LoginPage::class);
 Route::get('register', RegisterPage::class);
