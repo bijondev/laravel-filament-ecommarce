@@ -36,4 +36,6 @@ class Order extends Model
         return $this->hasOne(Address::class);
     }
 
+
+
 }
