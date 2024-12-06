@@ -20,9 +20,9 @@ class CartManagement{
         }
 
         if($existing_item !== null){
-            $cart_items[$existing_item]['quantity']++;
-            $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['price'];
-            $cart_items[$existing_item]['price'];
+            $cart_items[$existing_item]['quantaty']++;
+            $cart_items[$existing_item]['total_price'] = $cart_items[$existing_item]['price'];
+            $cart_items[$existing_item]['unit_price'];
         }
         else{
             $product = Product::where('id', $product_id)->first(['id', 'name', 'price', 'images']);
@@ -31,9 +31,9 @@ class CartManagement{
                     'product_id' => $product_id,
                     'name' => $product->name,
                     'images' => $product->images[0],
-                    'quantity' => 1,
-                    'price' => $product->price,
-                    'total_amount' => $product->price
+                    'quantaty' => 1,
+                    'unit_price' => $product->price,
+                    'total_price' => $product->price
                 ];
             }
         }
@@ -55,9 +55,9 @@ class CartManagement{
         }
 
         if($existing_item !== null){
-            $cart_items[$existing_item]['quantity']=$qty;
-            $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['price'];
-            $cart_items[$existing_item]['price'];
+            $cart_items[$existing_item]['quantaty']=$qty;
+            $cart_items[$existing_item]['unit_price'] = $cart_items[$existing_item]['price'];
+            $cart_items[$existing_item]['total_price'];
         }
         else{
             $product = Product::where('id', $product_id)->first(['id', 'name', 'price', 'images']);
@@ -66,9 +66,9 @@ class CartManagement{
                     'product_id' => $product_id,
                     'name' => $product->name,
                     'images' => $product->images[0],
-                    'quantity' => $qty,
-                    'price' => $product->price,
-                    'total_amount' => $product->price*$qty
+                    'quantaty' => $qty,
+                    'unit_price' => $product->price,
+                    'total_price' => $product->price*$qty
                 ];
             }
         }
@@ -94,7 +94,7 @@ class CartManagement{
         Cookie::queue('cart_items', json_encode($cart_items), 60 * 24 * 30);
     }
 
-    static public function cleatcartItems(){
+    static public function cleatrCartItems(){
         Cookie::queue(Cookie::forget('cart_items'));
     }
 
@@ -112,8 +112,8 @@ class CartManagement{
 
         foreach($cart_items as $key => $item){
             if($item['product_id'] == $product_id){
-                $cart_items[$key]['quantity']++;
-                $cart_items[$key]['total_amount'] = $cart_items[$key]['price']*$cart_items[$key]['quantity'];
+                $cart_items[$key]['quantaty']++;
+                $cart_items[$key]['total_price'] = $cart_items[$key]['unit_price']*$cart_items[$key]['quantaty'];
 
             }
         }
@@ -127,9 +127,9 @@ class CartManagement{
 
         foreach($cart_items as $key => $item){
             if($item['product_id'] == $product_id){
-                if($cart_items[$key]['quantity'] > 1){
-                    $cart_items[$key]['quantity']--;
-                    $cart_items[$key]['total_amount'] = $cart_items[$key]['price']*$cart_items[$key]['quantity'];
+                if($cart_items[$key]['quantaty'] > 1){
+                    $cart_items[$key]['quantaty']--;
+                    $cart_items[$key]['total_price'] = $cart_items[$key]['unit_price']*$cart_items[$key]['quantaty'];
                 }
             }
         }
@@ -139,7 +139,7 @@ class CartManagement{
     }
 
     static public function calculateGrandTotal($items){
-        return array_sum(array_column($items, 'total_amount'));
+        return array_sum(array_column($items, 'total_price'));
     }
 
 }

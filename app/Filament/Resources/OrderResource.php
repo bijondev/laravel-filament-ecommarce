@@ -131,14 +131,14 @@ class OrderResource extends Resource
                                     ->afterStateUpdated(fn($state, $set, $get) => $set('total_amount', $state * $get('unit_amount')))
                                 ,
 
-                                TextInput::make('unit_amount')
+                                TextInput::make('unit_price')
                                     ->numeric()
                                     ->required()
                                     ->disabled()
                                     ->dehydrated()
                                     ->columnSpan(3),
 
-                                TextInput::make('total_amount')
+                                TextInput::make('total_price')
                                     ->numeric()
                                     ->required()
                                     ->disabled()
@@ -154,7 +154,7 @@ class OrderResource extends Resource
                                 }
 
                                 foreach ($repeaters as $key => $repeater) {
-                                    $total += $get("items.{$key}.total_amount");
+                                    $total += $get("items.{$key}.total_price");
                                 }
                                 $set('grand_total', $total);
                                 return Number::currency($total, 'Tk.');
