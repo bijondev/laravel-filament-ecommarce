@@ -25,67 +25,89 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800">
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                    20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    18-02-2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-orange-500 py-1 px-3 rounded text-white shadow">Pending</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    12,000.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a href="#"
-                                        class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
-                                        Details</a>
-                                </td>
-                            </tr>
+                            @foreach ($orders as $order)
+                            @php
+                            $status = '';
+                            $payment_status = '';
+                            if($order->status=='new'){
+                            $status = '<span class="bg-orange-500 py-1 px-3 rounded text-white shadow">'. $order->status
+                                .'</span>';
+                            }
 
-                            <tr class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800">
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                    20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    18-02-2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-orange-500 py-1 px-3 rounded text-white shadow">Pending</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    12,000.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a href="#"
-                                        class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
-                                        Details</a>
-                                </td>
-                            </tr>
+                            if($order->status=='processing'){
+                            $status = '<span class="bg-blue-500 py-1 px-3 rounded text-white shadow">'. $order->status
+                                .'</span>';
+                            }
 
+                            if($order->status=='shipped'){
+                            $status = '<span class="bg-green-500 py-1 px-3 rounded text-white shadow">'. $order->status
+                                .'</span>';
+                            }
+
+                            if($order->status=='delivered'){
+                            $status = '<span class="bg-yellow-500 py-1 px-3 rounded text-white shadow">'. $order->status
+                                .'</span>';
+                            }
+
+                            if($order->status=='cancel'){
+                            $status = '<span class="bg-red-500 py-1 px-3 rounded text-white shadow">'. $order->status
+                                .'</span>';
+                            }
+
+                            if($order->payment_status=='pending'){
+                            $payment_status = '<span
+                                class="bg-green-500 py-1 px-3 rounded text-white shadow">'.$order->payment_status
+                                .'</span>';
+                            }
+
+                            if($order->payment_status=='paid'){
+                            $payment_status = '<span
+                                class="bg-yellow-500 py-1 px-3 rounded text-white shadow">'.$order->payment_status
+                                .'</span>';
+                            }
+
+                            if($order->payment_status=='failed'){
+                            $payment_status = '<span
+                                class="bg-red-500 py-1 px-3 rounded text-white shadow">'.$order->payment_status
+                                .'</span>';
+                            }
+
+
+
+                            @endphp
                             <tr class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800">
                                 <td
                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                    20</td>
+                                    {{ $order->id }}
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    18-02-2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-orange-500 py-1 px-3 rounded text-white shadow">Pending</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span></td>
+                                    {{ $order->created_at->format('M d, Y') }}
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    12,000.00</td>
+                                    {!! $status !!}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    {!! $payment_status !!}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    {{ '৳' . Number::format($order->grand_total, 2) }}
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a href="#"
+                                    <a wire:navigate href="/my-orders/{{ $order->id }}"
                                         class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
                                         Details</a>
                                 </td>
                             </tr>
+                            @endforeach
 
                         </tbody>
                     </table>
+
+
+
                 </div>
             </div>
+            {{ $orders->links() }}
         </div>
+        </ div>
     </div>
-</div>
